@@ -14,7 +14,7 @@ module TemplateTree
     end
 
     def to_s
-      Formatters::Ascii.new.format(self)
+      Formatters::Ascii.format(self)
     end
 
     def self.from_a(ary, parent=nil)

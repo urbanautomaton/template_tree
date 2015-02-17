@@ -1,10 +1,27 @@
+require 'forwardable'
+
 module TemplateTree
   module Formatters
     class Ascii
 
+      class << self
+        extend Forwardable
+
+        def_delegators :default_instance,
+          :format
+
+        private
+
+        def default_instance
+          @default_instance ||= new
+        end
+      end
+
       def format(node)
         lines(node).join("\n")
       end
+
+      private
 
       def lines(node)
         [node.name] + indent_children(node.children.map {|c| lines(c)})
