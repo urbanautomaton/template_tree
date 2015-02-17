@@ -10,18 +10,9 @@ RSpec.describe TemplateTree::Tree do
     subject.exit
     subject.enter("c")
 
-    expected = {
-      "root" => [
-        {
-          "a" => [
-            { "b" => [] },
-            { "c" => [] }
-          ]
-        }
-      ]
-    }
+    expected = [".", [["a", [["b", []], ["c", []]]]]]
 
-    expect(subject.to_h).to eq expected
+    expect(subject.to_a).to eq expected
   end
 
   it "prints a natty tree" do
@@ -36,7 +27,7 @@ RSpec.describe TemplateTree::Tree do
     subject.enter("e")
 
     expected = <<-EOS
-root
+.
 ├── a
 |   ├── b
 |   |   └── c

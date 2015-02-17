@@ -7,8 +7,12 @@ module TemplateTree
       @children = []
     end
 
-    def to_h
-      { name => children.map(&:to_h) }
+    def to_a
+      [name, children.map(&:to_a)]
+    end
+
+    def to_s
+      lines.join("\n")
     end
 
     def lines
