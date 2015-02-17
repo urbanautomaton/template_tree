@@ -2,7 +2,7 @@ require 'template_tree/formatters/ascii'
 
 module TemplateTree
   class Node
-    attr_reader :name, :parent, :children
+    attr_accessor :name, :parent, :children
 
     def initialize(name, parent)
       @name, @parent = name, parent
@@ -15,6 +15,23 @@ module TemplateTree
 
     def to_s
       Formatters::Ascii.new.format(self)
+    end
+
+    def self.from_a(ary, parent=nil)
+      name, children_ary = ary
+
+      new(name, parent).tap do |node|
+        children = children_ary.map{|c| from_a(c, node)}
+        node.children = children
+      end
+    end
+
+    def ==(other)
+      name == other.name && children == other.children
+    end
+
+    def eql?(other)
+      self == other
     end
 
   end

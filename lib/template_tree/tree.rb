@@ -4,9 +4,8 @@ require 'template_tree/node'
 module TemplateTree
   class Tree < Node
 
-    def initialize
-      @name         = "."
-      @children     = []
+    def initialize(name=".", parent=nil)
+      super
       @current_node = self
     end
 
