@@ -1,12 +1,11 @@
-require 'template_tree/errors'
 require 'template_tree/node'
 
 module TemplateTree
-  class Tree < Node
+  class Builder
+    attr_accessor :tree
 
-    def initialize(name=".", parent=nil)
-      super
-      @current_node = self
+    def initialize(root_name: ".")
+      @tree = @current_node = Node.new(root_name, nil)
     end
 
     def enter(name)
@@ -16,12 +15,11 @@ module TemplateTree
     end
 
     def exit
-      if @current_node == self
+      if @current_node.parent.nil?
         raise(ExitRootError, "Attempted to exit the root node")
       end
 
       @current_node = @current_node.parent
     end
-
   end
 end
