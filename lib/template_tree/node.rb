@@ -1,3 +1,4 @@
+require 'template_tree/errors'
 require 'template_tree/formatters/ascii'
 
 module TemplateTree
@@ -13,11 +14,21 @@ module TemplateTree
       [name, children.map(&:to_a)]
     end
 
-    def to_s
-      Formatters::Ascii.format(self)
+    def to_s(formatter: Formatters::Ascii)
+      formatter.format(self)
     end
 
     def self.from_a(ary, parent=nil)
+      unless ary.is_a?(Enumerable)
+        raise InvalidTreeError, "Input is not an Enumerable"
+      end
+      unless ary.length == 2
+        raise InvalidTreeError, "Array must have exactly two elements"
+      end
+      unless ary.last.is_a?(Enumerable)
+        raise InvalidTreeError, "Child element must be an Enumerable"
+      end
+
       name, children_ary = ary
 
       new(name, parent).tap do |node|
