@@ -77,4 +77,41 @@ RSpec.describe TemplateTree::Node do
     end
   end
 
+  describe "#ordered_leaves" do
+    it "returns just the ordered leaf nodes" do
+      tree = TemplateTree::Node.from_a(
+        [
+          "a",
+          [
+            ["b", []],
+            ["c", [["d", []]]]
+          ]
+        ]
+      )
+
+      expect(tree.ordered_leaves).to eq ["b", "d"]
+    end
+  end
+
+  describe "#filter_leaves" do
+    it "returns the subset of the tree leading to the leaves" do
+      tree = TemplateTree::Node.from_a(
+        [
+          "a",
+          [
+            ["b", []],
+            ["c", [["d", []]]],
+            ["e", []]
+          ]
+        ]
+      )
+
+      expected = TemplateTree::Node.from_a(
+        ["a", [["c", [["d", []]]], ["e", []]]]
+      )
+
+      expect(tree.filter(["d", "e"])).to eq expected
+    end
+  end
+
 end

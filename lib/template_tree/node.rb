@@ -45,5 +45,27 @@ module TemplateTree
       self == other
     end
 
+    def ordered_leaves
+      if children.empty?
+        [self.name]
+      else
+        children.flat_map(&:ordered_leaves)
+      end
+    end
+
+    def filter(leaves)
+      if children.empty? && leaves.include?(name)
+        dup
+      else
+        filtered_children = children.map { |c| c.filter(leaves) }.compact
+        if filtered_children.length > 0
+          duped_self = dup
+          filtered_children.each { |c| c.parent = dup }
+          duped_self.children = filtered_children
+          duped_self
+        end
+      end
+    end
+
   end
 end
